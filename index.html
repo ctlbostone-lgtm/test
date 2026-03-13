@@ -2,26 +2,31 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <!-- Vueport forcé à 1024px pour simuler un affichage desktop sur mobile -->
-    <meta name="viewport" content="width=1024, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Devis Élégant - CTL-POWER</title>
     <link rel="stylesheet" href="assets/fonts/roboto-slab.css">
     <link rel="stylesheet" href="assets/fonts/source-sans-pro.css">
     <link rel="stylesheet" href="assets/lib/fontawesome-all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="bg-pattern"></div>
 
-    <!-- Bannière de compteur -->
-    <div id="counter-banner" style="background: linear-gradient(135deg, #2d3436, #636e72); color: white; padding: 10px 20px; text-align: center; font-family: 'Roboto Slab', serif; border-bottom: 3px solid #d4a017; position: sticky; top: 0; z-index: 1000;">
-        <span id="timer-display">Temps restant : 06:00:00</span> |
-        <span id="remaining-display">Générations restantes : 3</span>
-    </div>
-
     <div class="main-container" id="main-container">
         <!-- COLONNE GAUCHE : FORMULAIRE -->
         <div class="control-panel">
+            <!-- COMPTEUR DE SESSION -->
+            <div class="session-counter">
+                <div class="counter-item">
+                    <i class="fas fa-hourglass-half"></i>
+                    <span id="countdown-timer">06:00:00</span>
+                </div>
+                <div class="counter-item">
+                    <i class="fas fa-file-pdf"></i>
+                    <span id="generation-left">3</span> devis restants
+                </div>
+            </div>
+
             <div class="tab-nav">
                 <button class="tab-btn" data-tab="company-tab"><i class="fas fa-building"></i> Entreprise</button>
                 <button class="tab-btn" data-tab="client-tab"><i class="fas fa-user-tie"></i> Client</button>
@@ -126,6 +131,7 @@
                     <div class="form-group">
                         <label for="currency">Devise</label>
                         <select id="currency" class="form-control">
+                            <!-- Afrique centrale et de l'Ouest -->
                             <option value="XAF">XAF - Franc CFA (BEAC)</option>
                             <option value="XOF">XOF - Franc CFA (BCEAO)</option>
                             <option value="NGN">NGN - Naira Nigérian (₦)</option>
@@ -133,6 +139,7 @@
                             <option value="KES">KES - Shilling Kenyan (KSh)</option>
                             <option value="MAD">MAD - Dirham Marocain (DH)</option>
                             <option value="ZAR">ZAR - Rand Sud-Africain (R)</option>
+                            <!-- Autres devises internationales -->
                             <option value="USD">USD - Dollar US ($)</option>
                             <option value="EUR">EUR - Euro (€)</option>
                             <option value="GBP">GBP - Livre Sterling (£)</option>
@@ -173,6 +180,7 @@
                             </select>
                         </div>
                     </div>
+                    <!-- NOUVELLE OPTION : Personnaliser le texte de la main-d'œuvre -->
                     <div class="option-group" style="margin-top: 10px; width: 100%;">
                         <input type="checkbox" id="custom-labor-text">
                         <label for="custom-labor-text">Personnaliser le texte (cacher le montant)</label>
@@ -221,7 +229,41 @@
                         </tr>
                     </thead>
                     <tbody id="items-table-body">
-                        <!-- Lignes générées par JS -->
+                        <tr>
+                            <td><input type="text" class="form-control item-description" value="câble vgv 2,5 mm"></td>
+                            <td>
+                                <select class="form-control item-unit">
+                                    <option value="piece" data-label="Pièce">Pièce</option>
+                                    <option value="liter" data-label="Litre">Litre</option>
+                                    <option value="meter" data-label="Mètre">Mètre</option>
+                                    <option value="kg" data-label="Kilogramme">Kilogramme</option>
+                                    <option value="hour" data-label="Heure">Heure</option>
+                                    <option value="day" data-label="Jour">Jour</option>
+                                    <option value="sqm" data-symbol="m²" data-label="Mètre carré">Mètre carré (m²)</option>
+                                    <option value="cbm" data-label="Mètre cube">Mètre cube</option>
+                                    <option value="ton" data-label="Tonne">Tonne</option>
+                                    <option value="flatrate" data-label="Forfait">Forfait</option>
+                                    <option value="service" data-label="Prestation">Prestation</option>
+                                    <option value="kit" data-label="Kit">Kit</option>
+                                    <option value="carton" data-label="Carton">Carton</option>
+                                    <option value="bottle" data-label="Bouteille">Bouteille</option>
+                                    <option value="roll" data-label="Rouleau">Rouleau</option>
+                                    <option value="bag" data-label="Sac">Sac</option>
+                                    <option value="box" data-label="Boîte">Boîte</option>
+                                    <option value="set" data-label="Set">Set</option>
+                                    <option value="pack" data-label="Pack">Pack</option>
+                                    <option value="bucket" data-label="Seau">Seau</option>
+                                    <option value="barrel" data-label="Baril">Baril</option>
+                                    <option value="pallet" data-label="Palette">Palette</option>
+                                    <option value="dozen" data-label="Douzaine">Douzaine</option>
+                                    <option value="pair" data-label="Paire">Paire</option>
+                                </select>
+                            </td>
+                            <td><input type="number" class="form-control item-quantity" value="1" min="1"></td>
+                            <td><input type="number" class="form-control item-price" value="1200.00" step="0.01"></td>
+                            <td class="item-total">1200.00</td>
+                            <td><button class="btn btn-danger btn-sm remove-item"><i class="fas fa-trash"></i> Suppr</button></td>
+                        </tr>
                     </tbody>
                 </table>
                 <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
@@ -310,7 +352,7 @@
                         <input type="range" id="watermark-rotation" class="form-control" min="0" max="360" step="1" value="45">
                         <span id="watermark-rotation-value">45°</span>
                     </div>
-                    <div class="form-group" style="display: none;">
+                    <div class="form-group" style="display: none;"> <!-- Position gérée par le glissement -->
                         <label for="watermark-position-x">Position X (%)</label>
                         <input type="range" id="watermark-position-x" class="form-control" min="0" max="100" step="1" value="50">
                         <span id="watermark-position-x-value">50%</span>
@@ -497,15 +539,12 @@
         </div>
     </div>
 
-    <!-- Scripts externes -->
     <script src="assets/lib/jspdf.umd.min.js"></script>
     <script src="assets/lib/html2canvas.min.js"></script>
     <script src="assets/lib/qrcode.min.js"></script>
     <script src="assets/lib/tailwind.min.js"></script>
-
-    <!-- Nos fichiers JS -->
-    <script src="config.js"></script>
-    <script src="script.js"></script>
+    <script src="counter.js"></script>
+    <script src="main.js"></script>
     <script src="chatbot.js"></script>
 </body>
 </html>
