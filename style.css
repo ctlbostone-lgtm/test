@@ -31,6 +31,11 @@ body {
     z-index: 1000;
     border-bottom: 2px solid var(--secondary-color);
 }
+.generation-counter a {
+    color: white;
+    text-decoration: underline;
+    font-weight: bold;
+}
 
 .bg-pattern {
     position: fixed;
