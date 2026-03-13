@@ -2,965 +2,510 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rapport Mensuel - THE TIC SARL</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Open Sans', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f8f9fa;
-            padding: 20px;
-        }
-        
-        .report-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #1a3a8f 0%, #2a5bd7 100%);
-            color: white;
-            padding: 40px 50px;
-            position: relative;
-        }
-        
-        .logo-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-        
-        .company-logo {
-            width: 180px;
-            height: 100px;
-            background-color: white;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #1a3a8f;
-            font-weight: bold;
-            font-size: 18px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-        
-        .report-title {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-        
-        .report-title h1 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 32px;
-            margin-bottom: 8px;
-            font-weight: 700;
-        }
-        
-        .report-title p {
-            font-size: 18px;
-            opacity: 0.9;
-        }
-        
-        .period-info {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 18px;
-            background: rgba(255, 255, 255, 0.15);
-            display: inline-block;
-            padding: 10px 25px;
-            border-radius: 30px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .content {
-            padding: 50px;
-        }
-        
-        .section {
-            margin-bottom: 45px;
-            page-break-inside: avoid;
-        }
-        
-        .section-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #eaeaea;
-        }
-        
-        .section-icon {
-            background: #1a3a8f;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 20px;
-            color: white;
-            font-size: 22px;
-        }
-        
-        .section-title {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 24px;
-            font-weight: 600;
-            color: #1a3a8f;
-        }
-        
-        .section-content {
-            padding-left: 70px;
-        }
-        
-        .highlight-box {
-            background: #f0f5ff;
-            border-left: 5px solid #1a3a8f;
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 15px;
-        }
-        
-        .card {
-            background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-        }
-        
-        .card-title {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            color: #1a3a8f;
-            font-weight: 600;
-        }
-        
-        .card-icon {
-            margin-right: 10px;
-            font-size: 18px;
-        }
-        
-        ul {
-            padding-left: 20px;
-        }
-        
-        li {
-            margin-bottom: 10px;
-            display: flex;
-            align-items: flex-start;
-        }
-        
-        li i {
-            color: #1a3a8f;
-            margin-right: 10px;
-            margin-top: 5px;
-        }
-        
-        .social-media-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-        
-        .social-item {
-            display: flex;
-            align-items: center;
-            padding: 12px;
-            background: #f8f9fa;
-            border-radius: 8px;
-        }
-        
-        .social-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            color: white;
-            font-size: 18px;
-        }
-        
-        .platform-name {
-            font-weight: 600;
-        }
-        
-        .platform-count {
-            font-size: 14px;
-            color: #666;
-        }
-        
-        .footer {
-            background: #f8f9fa;
-            padding: 30px 50px;
-            text-align: center;
-            border-top: 1px solid #eaeaea;
-            color: #666;
-            font-size: 14px;
-        }
-        
-        .signature-area {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 1px dashed #ccc;
-        }
-        
-        .signature {
-            width: 45%;
-        }
-        
-        .stamp {
-            width: 150px;
-            height: 100px;
-            border: 2px dashed #ccc;
-            border-radius: 5px;
-            margin: 20px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #999;
-            font-style: italic;
-        }
-        
-        /* Styles pour la galerie de visuels */
-        .visuals-gallery {
-            margin-top: 25px;
-        }
-        
-        .gallery-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: #1a3a8f;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .gallery-title i {
-            margin-right: 10px;
-        }
-        
-        .visuals-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 20px;
-            margin-top: 15px;
-        }
-        
-        .visual-item {
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            overflow: hidden;
-            transition: transform 0.3s;
-            cursor: pointer;
-            background: white;
-        }
-        
-        .visual-item:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-        }
-        
-        .visual-preview {
-            height: 150px;
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 48px;
-        }
-        
-        .visual-info {
-            padding: 15px;
-            text-align: center;
-            background: #f8f9fa;
-        }
-        
-        .visual-name {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 5px;
-        }
-        
-        .visual-type {
-            font-size: 14px;
-            color: #666;
-        }
-        
-        /* Modal pour visualiser les visuels en grand */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal-content {
-            max-width: 90%;
-            max-height: 90%;
-            border-radius: 10px;
-            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
-        }
-        
-        .close-modal {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            color: white;
-            font-size: 40px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-        
-        .close-modal:hover {
-            color: #2a5bd7;
-        }
-        
-        .modal-nav {
-            position: absolute;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            top: 50%;
-            transform: translateY(-50%);
-            padding: 0 20px;
-        }
-        
-        .nav-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            font-size: 30px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.3s;
-        }
-        
-        .nav-btn:hover {
-            background: rgba(255, 255, 255, 0.4);
-        }
-        
-        @media print {
-            body {
-                background: white;
-                padding: 0;
-            }
-            
-            .report-container {
-                box-shadow: none;
-            }
-            
-            .card:hover, .visual-item:hover {
-                transform: none;
-                box-shadow: none;
-            }
-            
-            .modal {
-                display: none !important;
-            }
-        }
-        
-        /* Style pour les abonnements */
-        .subscription-card {
-            background: linear-gradient(135deg, #1a3a8f 0%, #2a5bd7 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-        
-        .subscription-title {
-            display: flex;
-            align-items: center;
-            font-size: 22px;
-            margin-bottom: 15px;
-        }
-        
-        .subscription-title i {
-            margin-right: 15px;
-            font-size: 28px;
-        }
-        
-        .subscription-features {
-            margin-left: 40px;
-        }
-        
-        .subscription-features li {
-            color: white;
-            margin-bottom: 8px;
-        }
-        
-        .subscription-features li i {
-            color: #ffd700;
-        }
-    </style>
+    <!-- Vueport forcé à 1024px pour simuler un affichage desktop sur mobile -->
+    <meta name="viewport" content="width=1024, initial-scale=1">
+    <title>Devis Élégant - CTL-POWER</title>
+    <link rel="stylesheet" href="assets/fonts/roboto-slab.css">
+    <link rel="stylesheet" href="assets/fonts/source-sans-pro.css">
+    <link rel="stylesheet" href="assets/lib/fontawesome-all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="report-container">
-        <div class="header">
-            <div class="logo-section">
-                <!-- ICI VOUS POUVEZ METTRE LE LOGO DE L'ENTREPRISE -->
-                <div class="company-logo">
-                    <!-- Remplacez ce texte par votre logo -->
-                    <!-- <img src="LOGO_URL_ICI" alt="THE TIC SARL Logo" style="max-width: 160px; max-height: 80px;"> -->
-                    <!-- OU si pas d'image, laissez le texte ci-dessous -->
-                    THE TIC SARL
-                </div>
-                <div>
-                    <div class="period-info">
-                        <i class="far fa-calendar-alt"></i> Rapport du mois de [Mois, Année]
+    <div class="bg-pattern"></div>
+
+    <!-- Bannière de compteur -->
+    <div id="counter-banner" style="background: linear-gradient(135deg, #2d3436, #636e72); color: white; padding: 10px 20px; text-align: center; font-family: 'Roboto Slab', serif; border-bottom: 3px solid #d4a017; position: sticky; top: 0; z-index: 1000;">
+        <span id="timer-display">Temps restant : 06:00:00</span> |
+        <span id="remaining-display">Générations restantes : 3</span>
+    </div>
+
+    <div class="main-container" id="main-container">
+        <!-- COLONNE GAUCHE : FORMULAIRE -->
+        <div class="control-panel">
+            <div class="tab-nav">
+                <button class="tab-btn" data-tab="company-tab"><i class="fas fa-building"></i> Entreprise</button>
+                <button class="tab-btn" data-tab="client-tab"><i class="fas fa-user-tie"></i> Client</button>
+                <button class="tab-btn" data-tab="details-tab"><i class="fas fa-file-invoice"></i> Détails</button>
+                <button class="tab-btn active" data-tab="items-tab"><i class="fas fa-list-ul"></i> Prestations</button>
+                <button class="tab-btn" data-tab="notes-tab"><i class="fas fa-sticky-note"></i> Notes</button>
+                <button class="tab-btn" data-tab="design-tab"><i class="fas fa-palette"></i> Design</button>
+            </div>
+
+            <!-- Onglet Entreprise -->
+            <div id="company-tab" class="tab-content">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="company-name">Nom de l'entreprise</label>
+                        <input type="text" id="company-name" class="form-control" placeholder="CTL-POWER">
+                    </div>
+                    <div class="form-group">
+                        <label for="company-address">Adresse</label>
+                        <input type="text" id="company-address" class="form-control" placeholder="123 Rue Exemple">
+                    </div>
+                    <div class="form-group">
+                        <label for="company-city">Ville</label>
+                        <input type="text" id="company-city" class="form-control" placeholder="75000 DOUALA, Cameroun">
+                    </div>
+                    <div class="form-group">
+                        <label for="company-phone">Téléphone</label>
+                        <input type="text" id="company-phone" class="form-control" placeholder="01 23 45 67 89">
+                    </div>
+                    <div class="form-group">
+                        <label for="company-email">Email</label>
+                        <input type="email" id="company-email" class="form-control" placeholder="contact@ctlpower.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="company-siret">SIRET / N° fiscal</label>
+                        <input type="text" id="company-siret" class="form-control" placeholder="123 456 789 00010">
+                    </div>
+                    <div class="form-group">
+                        <label for="company-logo">Logo</label>
+                        <input type="file" id="company-logo" class="form-control" accept="image/*">
                     </div>
                 </div>
             </div>
-            
-            <div class="report-title">
-                <h1><i class="fas fa-file-alt"></i> RAPPORT DE FIN DE MOIS</h1>
-                <p>Synthèse des activités numériques réalisées</p>
-            </div>
-        </div>
-        
-        <div class="content">
-            <div class="section">
-                <div class="section-header">
-                    <div class="section-icon">
-                        <i class="fas fa-user-tie"></i>
+
+            <!-- Onglet Client -->
+            <div id="client-tab" class="tab-content">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="client-name">Nom du client</label>
+                        <input type="text" id="client-name" class="form-control" placeholder="Nom du client">
                     </div>
-                    <h2 class="section-title">Informations Générales</h2>
-                </div>
-                <div class="section-content">
-                    <div class="grid-container">
-                        <div class="card">
-                            <div class="card-title">
-                                <i class="fas fa-building card-icon"></i> Entreprise
-                            </div>
-                            <p><strong>THE TIC SARL</strong></p>
-                            <p>Société spécialisée en solutions de sécurité et vidéosurveillance</p>
-                        </div>
-                        
-                        <div class="card">
-                            <div class="card-title">
-                                <i class="fas fa-user card-icon"></i> Rédacteur
-                            </div>
-                            <p><strong>[Votre Prénom Nom]</strong></p>
-                            <p>Responsable du développement numérique</p>
-                        </div>
-                        
-                        <div class="card">
-                            <div class="card-title">
-                                <i class="fas fa-calendar-check card-icon"></i> Période
-                            </div>
-                            <p><strong>[Mois, Année]</strong></p>
-                            <p>Date du rapport: [Date de soumission]</p>
-                        </div>
+                    <div class="form-group">
+                        <label for="client-address">Adresse</label>
+                        <input type="text" id="client-address" class="form-control" placeholder="Adresse du client">
+                    </div>
+                    <div class="form-group">
+                        <label for="client-phone">Téléphone</label>
+                        <input type="text" id="client-phone" class="form-control" placeholder="Téléphone">
+                    </div>
+                    <div class="form-group">
+                        <label for="client-email">Email</label>
+                        <input type="email" id="client-email" class="form-control" placeholder="Email">
                     </div>
                 </div>
             </div>
-            
-            <div class="section">
-                <div class="section-header">
-                    <div class="section-icon">
-                        <i class="fas fa-globe"></i>
+
+            <!-- Onglet Détails -->
+            <div id="details-tab" class="tab-content">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="invoice-title-input">Sous-titre du devis (optionnel)</label>
+                        <input type="text" id="invoice-title-input" class="form-control" placeholder="ex: Installation électrique">
                     </div>
-                    <h2 class="section-title">Déploiement des Sites Web</h2>
-                </div>
-                <div class="section-content">
-                    <div class="highlight-box">
-                        <p>Deux sites web ont été mis en ligne avec succès ce mois-ci :</p>
+                    <div class="form-group">
+                        <label for="invoice-number">Numéro de devis</label>
+                        <input type="text" id="invoice-number" class="form-control" placeholder="2023-001">
                     </div>
-                    
-                    <div class="grid-container">
-                        <div class="card">
-                            <div class="card-title">
-                                <i class="fas fa-desktop card-icon"></i> theticsarl.com
-                            </div>
-                            <p>Site vitrine officiel de l'entreprise présentant ses services et son expertise en sécurité.</p>
-                            <p><i class="fas fa-check-circle" style="color: #28a745;"></i> <strong>Statut :</strong> En ligne et fonctionnel</p>
-                        </div>
-                        
-                        <div class="card">
-                            <div class="card-title">
-                                <i class="fas fa-shopping-bag card-icon"></i> ray-zentreprise.com
-                            </div>
-                            <p>Site dédié à la distribution de solutions de sécurité.</p>
-                            <p><i class="fas fa-check-circle" style="color: #28a745;"></i> <strong>Statut :</strong> En ligne et fonctionnel</p>
-                        </div>
+                    <div class="form-group">
+                        <label for="reference">Référence</label>
+                        <input type="text" id="reference" class="form-control" placeholder="PROJ-2023-001">
                     </div>
-                    
-                    <!-- Section Abonnement VEO3 -->
-                    <div class="subscription-card">
-                        <div class="subscription-title">
-                            <i class="fas fa-satellite-dish"></i> Abonnement VEO3 Actif
-                        </div>
-                        <p>Un abonnement VEO3 a été souscrit pour optimiser la surveillance et la sécurité des sites web.</p>
-                        <ul class="subscription-features">
-                            <li><i class="fas fa-check-circle"></i> Surveillance en temps réel 24h/24</li>
-                            <li><i class="fas fa-check-circle"></i> Alertes de sécurité instantanées</li>
-                            <li><i class="fas fa-check-circle"></i> Rapports hebdomadaires de performance</li>
-                            <li><i class="fas fa-check-circle"></i> Support technique prioritaire</li>
-                        </ul>
+                    <div class="form-group">
+                        <label for="invoice-date">Date</label>
+                        <input type="date" id="invoice-date" class="form-control">
                     </div>
-                </div>
-            </div>
-            
-            <div class="section">
-                <div class="section-header">
-                    <div class="section-icon">
-                        <i class="fas fa-envelope"></i>
+                    <div class="form-group">
+                        <label for="validity">Validité (jours)</label>
+                        <input type="number" id="validity" class="form-control" placeholder="30" min="1">
                     </div>
-                    <h2 class="section-title">Adresses Email Professionnelles</h2>
-                </div>
-                <div class="section-content">
-                    <p>Quatre adresses email professionnelles ont été créées pour structurer la communication :</p>
-                    
-                    <div class="grid-container">
-                        <div class="card">
-                            <div class="card-title">
-                                <i class="fas fa-first-aid card-icon"></i> Service d'Urgence
-                            </div>
-                            <p><strong>servicedesecuriterdurgence@gmail.com</strong></p>
-                            <p>Dédié aux demandes urgentes de sécurité et support client prioritaire.</p>
-                        </div>
-                        
-                        <div class="card">
-                            <div class="card-title">
-                                <i class="fas fa-shield-alt card-icon"></i> Sécurité Longview
-                            </div>
-                            <p><strong>longviewsecuriti@gmail.com</strong></p>
-                            <p>Pour les partenariats et services de sécurité haut de gamme.</p>
-                        </div>
-                        
-                        <div class="card">
-                            <div class="card-title">
-                                <i class="fas fa-truck card-icon"></i> Distribution
-                            </div>
-                            <p><strong>longsecameroondistributors@gmail.com</strong></p>
-                            <p>Gestion des distributeurs et commandes de matériel de sécurité.</p>
-                        </div>
-                        
-                        <div class="card">
-                            <div class="card-title">
-                                <i class="fas fa-building card-icon"></i> Société TIC SEC
-                            </div>
-                            <p><strong>ticsec.company@gmail.com</strong></p>
-                            <p>Email principal pour la communication générale et commerciale.</p>
-                        </div>
+                    <div class="form-group" style="display: flex; align-items: center; gap: 10px; padding-top: 25px;">
+                        <input type="checkbox" id="show-validity" checked style="width: 20px; height: 20px;">
+                        <label for="show-validity" style="margin-bottom: 0;">Afficher la validité</label>
                     </div>
-                    
-                    <div class="highlight-box">
-                        <p><i class="fas fa-lightbulb"></i> <strong>Recommandation :</strong> Pour une image plus professionnelle, utiliser à l'avenir des emails associés aux domaines de l'entreprise (ex: contact@theticsarl.com).</p>
+                    <div class="form-group">
+                        <label for="payment-method">Mode de paiement</label>
+                        <select id="payment-method" class="form-control">
+                            <option value="Espèces">Espèces</option>
+                            <option value="Virement">Virement</option>
+                            <option value="Chèque">Chèque</option>
+                            <option value="Carte bancaire">Carte bancaire</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="currency">Devise</label>
+                        <select id="currency" class="form-control">
+                            <option value="XAF">XAF - Franc CFA (BEAC)</option>
+                            <option value="XOF">XOF - Franc CFA (BCEAO)</option>
+                            <option value="NGN">NGN - Naira Nigérian (₦)</option>
+                            <option value="GHS">GHS - Cedi Ghanéen (₵)</option>
+                            <option value="KES">KES - Shilling Kenyan (KSh)</option>
+                            <option value="MAD">MAD - Dirham Marocain (DH)</option>
+                            <option value="ZAR">ZAR - Rand Sud-Africain (R)</option>
+                            <option value="USD">USD - Dollar US ($)</option>
+                            <option value="EUR">EUR - Euro (€)</option>
+                            <option value="GBP">GBP - Livre Sterling (£)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="table-style">Style de tableau</label>
+                        <select id="table-style" class="form-control">
+                            <option value="default">Défaut</option>
+                            <option value="moderne">Moderne</option>
+                            <option value="epure">Épuré</option>
+                            <option value="classic-plus">Classique rehaussé</option>
+                            <option value="minimal">Minimaliste</option>
+                        </select>
                     </div>
                 </div>
             </div>
-            
-            <div class="section">
-                <div class="section-header">
-                    <div class="section-icon">
-                        <i class="fas fa-hashtag"></i>
+
+            <!-- Onglet Prestations (Services) -->
+            <div id="items-tab" class="tab-content active">
+                <div class="options-section">
+                    <div class="option-group">
+                        <input type="checkbox" id="include-tva">
+                        <label for="include-tva">Inclure la TVA</label>
+                        <div class="option-input" id="tva-input" style="display: none;">
+                            <input type="number" id="tva-rate" class="form-control" value="20" min="0" step="0.1" placeholder="Taux %">
+                            <span>%</span>
+                        </div>
                     </div>
-                    <h2 class="section-title">Déploiement des Réseaux Sociaux</h2>
+                    <div class="option-group">
+                        <input type="checkbox" id="include-labor" checked>
+                        <label for="include-labor">Inclure main-d'œuvre</label>
+                        <div class="option-input" id="labor-input" style="display: flex;">
+                            <input type="number" id="labor-value" class="form-control" value="0" min="0" step="0.01" placeholder="Valeur">
+                            <select id="labor-type" class="form-control">
+                                <option value="percentage">%</option>
+                                <option value="fixed">Montant fixe</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="option-group" style="margin-top: 10px; width: 100%;">
+                        <input type="checkbox" id="custom-labor-text">
+                        <label for="custom-labor-text">Personnaliser le texte (cacher le montant)</label>
+                        <div class="option-input" id="custom-labor-text-input" style="display: none;">
+                            <input type="text" id="custom-labor-text-value" class="form-control" placeholder="ex: Forfait main-d'œuvre" style="width: 250px;">
+                        </div>
+                    </div>
+                    <div class="option-group">
+                        <input type="checkbox" id="include-extra-fees">
+                        <label for="include-extra-fees">Inclure frais supplémentaires</label>
+                        <div class="option-input" id="extra-fees-input" style="display: none;">
+                            <input type="number" id="extra-fees-value" class="form-control" value="0" min="0" step="0.01" placeholder="Valeur">
+                            <select id="extra-fees-type" class="form-control">
+                                <option value="percentage">%</option>
+                                <option value="fixed">Montant fixe</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <div class="section-content">
-                    <p>Création et gestion de comptes sur plusieurs plateformes pour accroître la visibilité :</p>
-                    
-                    <div class="social-media-list">
-                        <div class="social-item">
-                            <div class="social-icon" style="background-color: #000000;">
-                                <i class="fab fa-tiktok"></i>
-                            </div>
-                            <div>
-                                <div class="platform-name">TikTok</div>
-                                <div class="platform-count">4 comptes créés</div>
-                            </div>
-                        </div>
-                        
-                        <div class="social-item">
-                            <div class="social-icon" style="background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d);">
-                                <i class="fab fa-instagram"></i>
-                            </div>
-                            <div>
-                                <div class="platform-name">Instagram</div>
-                                <div class="platform-count">4 comptes créés</div>
-                            </div>
-                        </div>
-                        
-                        <div class="social-item">
-                            <div class="social-icon" style="background-color: #FFFC00; color: #000;">
-                                <i class="fab fa-snapchat"></i>
-                            </div>
-                            <div>
-                                <div class="platform-name">Snapchat</div>
-                                <div class="platform-count">4 comptes créés</div>
-                            </div>
-                        </div>
-                        
-                        <div class="social-item">
-                            <div class="social-icon" style="background-color: #000000;">
-                                <i class="fab fa-x-twitter"></i>
-                            </div>
-                            <div>
-                                <div class="platform-name">X (Twitter)</div>
-                                <div class="platform-count">4 comptes créés</div>
-                            </div>
-                        </div>
-                        
-                        <div class="social-item">
-                            <div class="social-icon" style="background-color: #FF0000;">
-                                <i class="fab fa-youtube"></i>
-                            </div>
-                            <div>
-                                <div class="platform-name">YouTube</div>
-                                <div class="platform-count">4 chaînes créées</div>
-                            </div>
-                        </div>
-                        
-                        <div class="social-item">
-                            <div class="social-icon" style="background-color: #0077b5;">
-                                <i class="fab fa-linkedin"></i>
-                            </div>
-                            <div>
-                                <div class="platform-name">LinkedIn</div>
-                                <div class="platform-count">3 comptes créés</div>
-                            </div>
-                        </div>
-                        
-                        <div class="social-item">
-                            <div class="social-icon" style="background-color: #E60023;">
-                                <i class="fab fa-pinterest"></i>
-                            </div>
-                            <div>
-                                <div class="platform-name">Pinterest</div>
-                                <div class="platform-count">4 comptes créés</div>
-                            </div>
-                        </div>
-                        
-                        <div class="social-item">
-                            <div class="social-icon" style="background-color: #0F9D58;">
-                                <i class="fab fa-google"></i>
-                            </div>
-                            <div>
-                                <div class="platform-name">Google Business</div>
-                                <div class="platform-count">3 comptes créés</div>
-                            </div>
-                        </div>
+
+                <!-- Sélecteur d'exemples de métiers -->
+                <div style="margin-bottom: 20px; padding: 10px; background: #f1f2f6; border-radius: 6px;">
+                    <label for="example-trade" style="font-weight: 600; margin-right: 10px;">Charger un exemple pour :</label>
+                    <select id="example-trade" class="form-control" style="width: auto; display: inline-block;">
+                        <option value="">-- Sélectionnez un métier --</option>
+                        <option value="electricien">Électricien</option>
+                        <option value="plombier">Plombier</option>
+                        <option value="peintre">Peintre</option>
+                        <option value="geniecivil">Génie civil / Construction</option>
+                        <option value="mecanicien">Mécanicien</option>
+                        <option value="hydraulicien">Hydraulicien (AEP)</option>
+                        <option value="carreleur">Carreleur</option>
+                    </select>
+                    <button class="btn btn-primary" id="load-example-btn" style="margin-left: 10px;"><i class="fas fa-bolt"></i> Charger</button>
+                </div>
+
+                <table class="items-table">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Unité</th>
+                            <th>Qté</th>
+                            <th>Prix unitaire</th>
+                            <th>Sous-total</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="items-table-body">
+                        <!-- Lignes générées par JS -->
+                    </tbody>
+                </table>
+                <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+                    <button class="btn btn-success add-item zoom"><i class="fas fa-plus"></i> Ajouter article</button>
+                    <button class="btn btn-primary add-section zoom btn-add-section"><i class="fas fa-heading"></i> Section</button>
+                    <button class="btn btn-warning add-section-first zoom btn-add-section" style="background: #f39c12;"><i class="fas fa-arrow-up"></i> Section en tête</button>
+                </div>
+            </div>
+
+            <!-- Onglet Notes -->
+            <div id="notes-tab" class="tab-content">
+                <div class="form-group">
+                    <label for="notes">Conditions et notes personnalisées</label>
+                    <textarea id="notes" class="form-control" rows="5" placeholder="Saisissez vos conditions et notes..."></textarea>
+                </div>
+            </div>
+
+            <!-- Onglet Design -->
+            <div id="design-tab" class="tab-content">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="invoice-main-title">Titre principal du document</label>
+                        <input type="text" id="invoice-main-title" class="form-control" value="DEVIS" placeholder="ex: DEVIS, FACTURE, PROFORMA...">
                     </div>
-                    
-                    <div class="highlight-box">
-                        <p><i class="fas fa-cogs"></i> <strong>Outils d'automatisation :</strong> 4 comptes Zoho ont été configurés pour effectuer des publications quotidiennes sur ces réseaux sociaux.</p>
+                    <div class="form-group">
+                        <label for="template-style">Style de modèle</label>
+                        <select id="template-style" class="form-control">
+                            <option value="elegant">Élégant (défaut)</option>
+                            <option value="entreprise">Entreprise</option>
+                            <option value="innovant">Innovant</option>
+                            <option value="ctl">CTL (le plus beau)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="color-scheme">Palette de couleurs</label>
+                        <select id="color-scheme" class="form-control">
+                            <option value="gold" selected>Or</option>
+                            <option value="blue">Bleu</option>
+                            <option value="green">Vert</option>
+                            <option value="purple">Violet</option>
+                            <option value="orange">Orange</option>
+                            <option value="red">Rouge</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="font-family">Police</label>
+                        <select id="font-family" class="form-control">
+                            <option value="Source Sans Pro">Source Sans Pro</option>
+                            <option value="Roboto">Roboto</option>
+                            <option value="Georgia">Georgia</option>
+                        </select>
+                    </div>
+
+                    <!-- Section Filigrane -->
+                    <div class="form-group" style="grid-column: 1 / -1; margin-top: 30px; padding-top: 20px; border-top: 2px solid var(--primary-color);">
+                        <h3>🖼️ Filigrane personnalisé</h3>
+                    </div>
+                    <div class="form-group">
+                        <label for="watermark-type">Type de filigrane</label>
+                        <select id="watermark-type" class="form-control">
+                            <option value="none">Aucun</option>
+                            <option value="text">Texte</option>
+                            <option value="image">Image</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="watermark-text-group">
+                        <label for="watermark-text">Texte du filigrane</label>
+                        <input type="text" id="watermark-text" class="form-control" placeholder="ex: CONFIDENTIEL">
+                    </div>
+                    <div class="form-group" id="watermark-image-group" style="display: none;">
+                        <label for="watermark-image-upload">Image du filigrane</label>
+                        <input type="file" id="watermark-image-upload" class="form-control" accept="image/*">
+                    </div>
+                    <div class="form-group">
+                        <label for="watermark-size">Taille (mm)</label>
+                        <input type="range" id="watermark-size" class="form-control" min="10" max="300" step="1" value="50">
+                        <span id="watermark-size-value">50 mm</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="watermark-opacity">Opacité</label>
+                        <input type="range" id="watermark-opacity" class="form-control" min="0" max="1" step="0.05" value="0.3">
+                        <span id="watermark-opacity-value">0.3</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="watermark-rotation">Rotation (degrés)</label>
+                        <input type="range" id="watermark-rotation" class="form-control" min="0" max="360" step="1" value="45">
+                        <span id="watermark-rotation-value">45°</span>
+                    </div>
+                    <div class="form-group" style="display: none;">
+                        <label for="watermark-position-x">Position X (%)</label>
+                        <input type="range" id="watermark-position-x" class="form-control" min="0" max="100" step="1" value="50">
+                        <span id="watermark-position-x-value">50%</span>
+                    </div>
+                    <div class="form-group" style="display: none;">
+                        <label for="watermark-position-y">Position Y (%)</label>
+                        <input type="range" id="watermark-position-y" class="form-control" min="0" max="100" step="1" value="50">
+                        <span id="watermark-position-y-value">50%</span>
+                    </div>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <p class="text-muted">💡 Déplacez le filigrane directement en le faisant glisser dans l'aperçu.</p>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-danger" id="watermark-remove-btn">
+                            <i class="fas fa-trash"></i> Supprimer le filigrane
+                        </button>
+                    </div>
+
+                    <!-- Section Tampon -->
+                    <div class="form-group" style="grid-column: 1 / -1; margin-top: 30px; padding-top: 20px; border-top: 2px solid var(--primary-color);">
+                        <h3>🖋️ Tampon personnalisé</h3>
+                    </div>
+                    <div class="form-group">
+                        <label for="stamp-upload">Image du tampon</label>
+                        <input type="file" id="stamp-upload" class="form-control" accept="image/*">
+                        <small style="color: #666;">Taille recommandée : 150x150px (PNG avec transparence)</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="stamp-size">Taille du tampon (mm)</label>
+                        <input type="range" id="stamp-size" class="form-control" min="10" max="300" step="5" value="50">
+                        <span id="stamp-size-value">50 mm</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="stamp-opacity">Opacité du tampon</label>
+                        <input type="range" id="stamp-opacity" class="form-control" min="0.1" max="1" step="0.1" value="1">
+                        <span id="stamp-opacity-value">100%</span>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-danger" id="stamp-remove-btn">
+                            <i class="fas fa-trash"></i> Supprimer le tampon
+                        </button>
+                    </div>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <p class="text-muted">💡 Déplacez le tampon directement en le faisant glisser dans l'aperçu.</p>
                     </div>
                 </div>
             </div>
-            
-            <div class="section">
-                <div class="section-header">
-                    <div class="section-icon">
-                        <i class="fas fa-palette"></i>
-                    </div>
-                    <h2 class="section-title">Visuels Créés</h2>
-                </div>
-                <div class="section-content">
-                    <p>Plusieurs visuels ont été créés sur le thème de la vidéosurveillance et sécurité :</p>
-                    
-                    <div class="visuals-gallery">
-                        <div class="gallery-title">
-                            <i class="fas fa-images"></i> Galerie des Visuels Créés (Cliquez pour agrandir)
-                        </div>
-                        
-                        <div class="visuals-grid" id="visuals-grid">
-                            <!-- Visuel 1 -->
-                            <div class="visual-item" onclick="openModal(1)">
-                                <div class="visual-preview">
-                                    <i class="fas fa-camera"></i>
-                                </div>
-                                <div class="visual-info">
-                                    <div class="visual-name">Système Surveillance</div>
-                                    <div class="visual-type">Infographie sécurité</div>
-                                </div>
-                            </div>
-                            
-                            <!-- Visuel 2 -->
-                            <div class="visual-item" onclick="openModal(2)">
-                                <div class="visual-preview" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
-                                    <i class="fas fa-shield-alt"></i>
-                                </div>
-                                <div class="visual-info">
-                                    <div class="visual-name">Protection 24/7</div>
-                                    <div class="visual-type">Visuel réseaux sociaux</div>
-                                </div>
-                            </div>
-                            
-                            <!-- Visuel 3 -->
-                            <div class="visual-item" onclick="openModal(3)">
-                                <div class="visual-preview" style="background: linear-gradient(135deg, #fc4a1a 0%, #f7b733 100%);">
-                                    <i class="fas fa-video"></i>
-                                </div>
-                                <div class="visual-info">
-                                    <div class="visual-name">Caméras HD</div>
-                                    <div class="visual-type">Graphique technique</div>
-                                </div>
-                            </div>
-                            
-                            <!-- Visuel 4 -->
-                            <div class="visual-item" onclick="openModal(4)">
-                                <div class="visual-preview" style="background: linear-gradient(135deg, #8E2DE2 0%, #4A00E0 100%);">
-                                    <i class="fas fa-home"></i>
-                                </div>
-                                <div class="visual-info">
-                                    <div class="visual-name">Sécurité Domestique</div>
-                                    <div class="visual-type">Visuel promotionnel</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="highlight-box">
-                            <p><i class="fas fa-chart-line"></i> <strong>Utilisation :</strong> Ces visuels ont été publiés sur Pinterest, X, Instagram, YouTube et TikTok pour promouvoir nos services de vidéosurveillance.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="section">
-                <div class="section-header">
-                    <div class="section-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h2 class="section-title">Stratégie de Contenu & Publications</h2>
-                </div>
-                <div class="section-content">
-                    <ul>
-                        <li><i class="fas fa-video"></i> <strong>Thématique principale :</strong> Vidéosurveillance et sécurité électronique</li>
-                        <li><i class="fas fa-palette"></i> <strong>Contenu créé :</strong> 4 visuels principaux + plusieurs variations pour réseaux sociaux</li>
-                        <li><i class="fas fa-share-alt"></i> <strong>Plateformes ciblées :</strong> Pinterest, X, Instagram, YouTube, TikTok</li>
-                        <li><i class="fas fa-clock"></i> <strong>Publication :</strong> Postes quotidiens planifiés via Zoho</li>
-                        <li><i class="fas fa-eye"></i> <strong>Engagement :</strong> Suivi des performances sur toutes les plateformes</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="section">
-                <div class="section-header">
-                    <div class="section-icon">
-                        <i class="fas fa-bullseye"></i>
-                    </div>
-                    <h2 class="section-title">Recommandations pour le Mois Prochain</h2>
-                </div>
-                <div class="section-content">
-                    <div class="grid-container">
-                        <div class="card">
-                            <div class="card-title">
-                                <i class="fas fa-at card-icon"></i> Emails professionnels
-                            </div>
-                            <p>Créer des emails avec les domaines de l'entreprise (ex: contact@theticsarl.com).</p>
-                        </div>
-                        
-                        <div class="card">
-                            <div class="card-title">
-                                <i class="fas fa-calendar-alt card-icon"></i> Calendrier éditorial
-                            </div>
-                            <p>Établir un planning détaillé de publications pour chaque plateforme.</p>
-                        </div>
-                        
-                        <div class="card">
-                            <div class="card-title">
-                                <i class="fas fa-chart-bar card-icon"></i> Analyse des performances
-                            </div>
-                            <p>Utiliser des outils de monitoring pour suivre l'engagement et ajuster la stratégie.</p>
-                        </div>
-                        
-                        <div class="card">
-                            <div class="card-title">
-                                <i class="fas fa-video card-icon"></i> Contenu vidéo
-                            </div>
-                            <p>Créer des tutoriels vidéo de démonstration des systèmes de sécurité.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="section">
-                <div class="section-header">
-                    <div class="section-icon">
-                        <i class="fas fa-file-signature"></i>
-                    </div>
-                    <h2 class="section-title">Validation</h2>
-                </div>
-                <div class="section-content">
-                    <div class="signature-area">
-                        <div class="signature">
-                            <p><strong>Rédigé par :</strong></p>
-                            <p>[Votre Prénom Nom]</p>
-                            <p>Responsable du développement numérique</p>
-                            <div class="stamp">Signature</div>
-                        </div>
-                        
-                        <div class="signature">
-                            <p><strong>Pour :</strong></p>
-                            <p>THE TIC SARL</p>
-                            <p>Direction Générale</p>
-                            <div class="stamp">Cachet entreprise</div>
-                        </div>
-                    </div>
-                </div>
+
+            <div style="padding: 15px 20px; border-top: 1px solid #dfe4ea; display: flex; justify-content: flex-end; gap: 10px;">
+                <button class="btn btn-primary zoom" id="generate-pdf"><i class="fas fa-file-pdf"></i> Générer PDF</button>
+                <button class="btn btn-primary zoom" id="save-template"><i class="fas fa-save"></i> Enregistrer</button>
+                <button class="btn btn-primary zoom" id="reset-form"><i class="fas fa-redo"></i> Réinitialiser</button>
+                <button class="btn btn-primary zoom" id="load-history-btn"><i class="fas fa-folder-open"></i> Charger devis</button>
             </div>
         </div>
-        
-        <div class="footer">
-            <p><i class="fas fa-lock"></i> Document interne - confidentiel</p>
-            <p>THE TIC SARL - Développement numérique - Rapport mensuel</p>
-            <p>Généré le : [Date de génération]</p>
+
+        <!-- SÉPARATEUR REDIMENSIONNABLE -->
+        <div class="resizer" id="resizer"></div>
+
+        <!-- COLONNE DROITE : APERÇU -->
+        <div class="invoice-preview" id="invoice-preview">
+            <!-- Overlay pour le filigrane -->
+            <div class="watermark-overlay" id="watermark-overlay"></div>
+            <!-- Overlay pour le tampon -->
+            <div class="stamp-overlay" id="stamp-overlay"></div>
+
+            <div class="invoice-header">
+                <div class="company-info">
+                    <div class="logo-container" id="logo-preview">
+                        <img src="https://via.placeholder.com/80x80?text=LOGO" class="logo" id="company-logo-preview">
+                    </div>
+                    <div>
+                        <h2 class="company-name-display" id="company-name-display" style="background: white; padding: 5px 10px; border-radius: 4px; display: inline-block;">CTL-POWER</h2>
+                        <p id="company-address-preview" class="hidden">123 Rue Exemple</p>
+                        <p id="company-city-preview" class="hidden">75000 DOUALA, Cameroun</p>
+                        <p id="company-phone-preview" class="hidden">Tél: +237 6 80 04 01 45</p>
+                        <p id="company-email-preview" class="hidden">Email: ctlpowerr@gmail.com</p>
+                        <p id="company-siret-preview" class="hidden">N° fiscal: 123 456 789 00010</p>
+                    </div>
+                </div>
+                <div class="invoice-details">
+                    <h1 class="invoice-title" id="main-invoice-title">DEVIS</h1>
+                    <p id="custom-title-preview" style="font-weight: bold; font-size: 1.2em; margin-bottom: 10px;"></p>
+                    <p>N° <span id="invoice-number-preview">2026-001</span></p>
+                    <p>Date : <span id="invoice-date-preview">01/01/2026</span></p>
+                    <p id="validity-preview-container">Validité : <span id="validity-preview">30</span> jours</p>
+                </div>
+            </div>
+
+            <div class="invoice-body">
+                <div class="client-info">
+                    <div class="info-box">
+                        <h3>Client</h3>
+                        <p id="client-name-preview" class="hidden">Nom du client</p>
+                        <p id="client-address-preview" class="hidden">Adresse du client</p>
+                        <p id="client-phone-preview" class="hidden">Téléphone</p>
+                        <p id="client-email-preview" class="hidden">Email</p>
+                    </div>
+                    <div class="info-box">
+                        <h3>Détails</h3>
+                        <p id="reference-preview-container" class="hidden">Référence : <span id="reference-preview">PROJ-2023-001</span></p>
+                        <p>Paiement : <span id="payment-method-preview">Virement</span></p>
+                        <p>Devise : <span id="currency-preview">FCFA</span></p>
+                    </div>
+                </div>
+
+                <h2>Prestations</h2>
+                <div id="preview-tables-container"></div>
+
+                <div class="invoice-total">
+                    <div>
+                        <p>Total HT : <span id="total-ht">1 200 FCFA</span></p>
+                        <p id="tva-row">TVA (<span id="tva-rate-preview">20</span>%) : <span id="tva-amount">240 FCFA</span></p>
+                        <p id="labor-row">Main-d'œuvre : <span id="labor-amount">0 FCFA</span></p>
+                        <p id="extra-fees-row" class="hidden">Frais supplémentaires : <span id="extra-fees-amount">0 FCFA</span></p>
+                        <p class="total-amount">Total TTC : <span id="total-ttc">1 440 FCFA</span></p>
+                    </div>
+                    <div class="qr-code" id="qr-code"></div>
+                </div>
+            </div>
+
+            <div class="invoice-footer">
+                <div id="notes-preview-container" class="hidden">
+                    <h3>Conditions et notes</h3>
+                    <div id="notes-preview"></div>
+                </div>
+                <div class="signature-area">
+                    <div class="signature-box">
+                        <p>Client</p>
+                        <div class="signature-line"></div>
+                    </div>
+                    <div class="signature-box">
+                        <p class="company-signature-display" id="company-name-signature">Pour CTL-POWER</p>
+                        <div class="signature-line"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    
-    <!-- Modal pour visualiser les visuels en grand -->
-    <div class="modal" id="imageModal">
-        <span class="close-modal" onclick="closeModal()">&times;</span>
-        <div class="modal-nav">
-            <button class="nav-btn" onclick="changeImage(-1)">&#10094;</button>
-            <button class="nav-btn" onclick="changeImage(1)">&#10095;</button>
+
+    <div class="theme-selector">
+        <button class="theme-btn zoom" id="theme-toggle">
+            <i class="fas fa-palette"></i>
+        </button>
+        <div class="theme-panel" id="theme-panel">
+            <div class="theme-option" data-theme="gold">
+                <div class="theme-color" style="background: #d4a017;"></div>
+                <span>Or</span>
+            </div>
+            <div class="theme-option" data-theme="blue">
+                <div class="theme-color" style="background: #0984e3;"></div>
+                <span>Bleu</span>
+            </div>
+            <div class="theme-option" data-theme="green">
+                <div class="theme-color" style="background: #2ecc71;"></div>
+                <span>Vert</span>
+            </div>
+            <div class="theme-option" data-theme="purple">
+                <div class="theme-color" style="background: #9b59b6;"></div>
+                <span>Violet</span>
+            </div>
+            <div class="theme-option" data-theme="orange">
+                <div class="theme-color" style="background: #e67e22;"></div>
+                <span>Orange</span>
+            </div>
+            <div class="theme-option" data-theme="red">
+                <div class="theme-color" style="background: #e74c3c;"></div>
+                <span>Rouge</span>
+            </div>
         </div>
-        <img class="modal-content" id="modalImage" src="" alt="Visuel">
     </div>
-    
-    <script>
-        // Remplir automatiquement la date actuelle
-        const now = new Date();
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        const currentDate = now.toLocaleDateString('fr-FR', options);
-        
-        // Mettre à jour toutes les dates dans le document
-        document.querySelectorAll('.period-info').forEach(el => {
-            el.innerHTML = `<i class="far fa-calendar-alt"></i> Rapport du mois de ${now.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}`;
-        });
-        
-        document.querySelectorAll('p:contains("[Date de soumission]")').forEach(el => {
-            if (el.textContent.includes("[Date de soumission]")) {
-                el.textContent = `Date du rapport: ${currentDate}`;
-            }
-        });
-        
-        document.querySelectorAll('p:contains("[Date de génération]")').forEach(el => {
-            if (el.textContent.includes("[Date de génération]")) {
-                el.textContent = `Généré le : ${currentDate}`;
-            }
-        });
-        
-        // Gestion de la galerie de visuels
-        let currentImageIndex = 1;
-        const totalImages = 4;
-        const modal = document.getElementById('imageModal');
-        const modalImage = document.getElementById('modalImage');
-        
-        // Images simulées (dans un cas réel, vous mettriez les URLs de vos images)
-        const imageSources = {
-            1: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-            2: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-            3: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w-1000&q=80",
-            4: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
-        };
-        
-        // Textes descriptifs pour chaque image
-        const imageDescriptions = {
-            1: "Visuel 1 : Système de surveillance avancé - Infographie sécurité",
-            2: "Visuel 2 : Protection 24h/24 - Visuel réseaux sociaux",
-            3: "Visuel 3 : Caméras haute définition - Graphique technique",
-            4: "Visuel 4 : Sécurité domestique - Visuel promotionnel"
-        };
-        
-        function openModal(imageIndex) {
-            currentImageIndex = imageIndex;
-            modalImage.src = imageSources[imageIndex];
-            modalImage.alt = imageDescriptions[imageIndex];
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeModal() {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-        
-        function changeImage(direction) {
-            currentImageIndex += direction;
-            
-            if (currentImageIndex > totalImages) {
-                currentImageIndex = 1;
-            } else if (currentImageIndex < 1) {
-                currentImageIndex = totalImages;
-            }
-            
-            modalImage.src = imageSources[currentImageIndex];
-            modalImage.alt = imageDescriptions[currentImageIndex];
-        }
-        
-        // Fermer le modal en cliquant en dehors de l'image
-        modal.addEventListener('click', function(event) {
-            if (event.target === modal) {
-                closeModal();
-            }
-        });
-        
-        // Navigation au clavier
-        document.addEventListener('keydown', function(event) {
-            if (modal.style.display === 'flex') {
-                if (event.key === 'Escape') {
-                    closeModal();
-                } else if (event.key === 'ArrowLeft') {
-                    changeImage(-1);
-                } else if (event.key === 'ArrowRight') {
-                    changeImage(1);
-                }
-            }
-        });
-        
-        // Remplacer [Mois, Année] dans tout le document
-        const monthYear = now.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
-        document.body.innerHTML = document.body.innerHTML.replace(/\[Mois, Année\]/g, monthYear);
-    </script>
+
+    <!-- MODALE D'HISTORIQUE DES DEVIS -->
+    <div id="history-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-history"></i> Devis enregistrés</h2>
+                <button class="close-modal" id="close-history-modal">&times;</button>
+            </div>
+            <div id="history-list" class="history-list">
+                <!-- Liste générée dynamiquement -->
+                <div class="empty-history">Aucun devis enregistré pour le moment.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts externes -->
+    <script src="assets/lib/jspdf.umd.min.js"></script>
+    <script src="assets/lib/html2canvas.min.js"></script>
+    <script src="assets/lib/qrcode.min.js"></script>
+    <script src="assets/lib/tailwind.min.js"></script>
+
+    <!-- Nos fichiers JS -->
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+    <script src="chatbot.js"></script>
 </body>
 </html>
