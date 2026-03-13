@@ -1426,4 +1426,1032 @@ function updateInvoicePreview() {
         companyNameDisplay.style.display = 'inline-block';
     }
     if (companyNameSignature) {
-        companyNameSignature.text
+        companyNameSignature.textContent = 'Pour ' + (companyName || 'CTL-POWER');
+    }
+
+    const fields = {
+        'company-address': ['company-address-preview', '123 Rue Exemple'],
+        'company-city': ['company-city-preview', '75000 DOUALA, Cameroun'],
+        'company-phone': ['company-phone-preview', 'Tél: +237 6 80 04 01 45', 'Tél: '],
+        'company-email': ['company-email-preview', 'Email: ctlpowerr@gmail.com', 'Email: '],
+        'company-siret': ['company-siret-preview', 'N° fiscal: 123 456 789 00010', 'N° fiscal: '],
+        'client-name': ['client-name-preview', 'Nom du client'],
+        'client-address': ['client-address-preview', 'Adresse du client'],
+        'client-phone': ['client-phone-preview', 'Téléphone'],
+        'client-email': ['client-email-preview', 'Email'],
+        'invoice-number': ['invoice-number-preview', '2026-001'],
+        'reference': ['reference-preview-container', 'PROJ-2026-001', 'Référence : ', 'reference-preview'],
+        'invoice-title-input': ['custom-title-preview', '']
+    };
+    Object.entries(fields).forEach(([inputId, [previewId, defaultValue, prefix = '', textId = previewId]]) => {
+        const value = document.getElementById(inputId)?.value;
+        const element = document.getElementById(textId);
+        if (element) {
+            toggleVisibility(textId, value, defaultValue, prefix);
+            element.style.fontSize = '12px';
+        }
+    });
+
+    const mainTitle = document.getElementById('invoice-main-title')?.value || 'DEVIS';
+    document.getElementById('main-invoice-title').textContent = mainTitle;
+
+    const invoiceDate = document.getElementById('invoice-date')?.value;
+    const validity = document.getElementById('validity')?.value;
+    const paymentMethod = document.getElementById('payment-method')?.value;
+    const currency = document.getElementById('currency')?.value;
+    if (document.getElementById('invoice-date-preview')) {
+        document.getElementById('invoice-date-preview').textContent = formatDate(invoiceDate) || '01/01/2023';
+        document.getElementById('invoice-date-preview').style.fontSize = '12px';
+    }
+    if (document.getElementById('validity-preview')) {
+        document.getElementById('validity-preview').textContent = validity || '30';
+        document.getElementById('validity-preview').style.fontSize = '12px';
+    }
+    if (document.getElementById('payment-method-preview')) {
+        document.getElementById('payment-method-preview').textContent = paymentMethod || 'Virement';
+        document.getElementById('payment-method-preview').style.fontSize = '12px';
+    }
+    if (document.getElementById('currency-preview')) {
+        const currencyDisplay = getCurrencySymbol(currency);
+        document.getElementById('currency-preview').textContent = currencyDisplay;
+        document.getElementById('currency-preview').style.fontSize = '12px';
+    }
+
+    const showValidity = document.getElementById('show-validity')?.checked;
+    const validityContainer = document.getElementById('validity-preview-container');
+    if (validityContainer) {
+        validityContainer.style.display = showValidity ? 'block' : 'none';
+    }
+
+    const notes = document.getElementById('notes')?.value;
+    const notesContainer = document.getElementById('notes-preview-container');
+    const notesPreview = document.getElementById('notes-preview');
+    if (notesContainer && notesPreview) {
+        notesContainer.classList.toggle('hidden', !notes);
+        notesPreview.innerHTML = notes ? notes.replace(/\n/g, '<br>') : '';
+        notesPreview.style.fontSize = '12px';
+    }
+
+    const templateStyle = document.getElementById('template-style')?.value || 'elegant';
+    const previewElement = document.getElementById('invoice-preview');
+    previewElement.classList.remove('template-entreprise', 'template-innovant', 'template-ctl', 'template-elegant');
+    if (templateStyle !== 'elegant') {
+        previewElement.classList.add(`template-${templateStyle}`);
+    }
+
+    calculateDatas();
+    updateStampPreview();
+    updateWatermarkPreview();
+}
+
+// ==================== GESTION DE L'HISTORIQUE ====================
+function collectInvoiceData() {
+    const items = [];
+    const rows = document.querySelectorAll('#items-table-body tr');
+    rows.forEach(row => {
+        if (row.classList.contains('section-row')) {
+            const titleInput = row.querySelector('.section-title');
+            const title = titleInput ? titleInput.value : '';
+            items.push({ type: 'section', title: title });
+        } else if (row.classList.contains('section-option-row')) {
+            const checkbox = row.querySelector('.section-labor-checkbox');
+            const laborValue = row.querySelector('.section-labor-value')?.value;
+            const laborType = row.querySelector('.section-labor-type')?.value;
+            items.push({ 
+                type: 'sectionOptions', 
+                enabled: checkbox ? checkbox.checked : false,
+                laborValue: laborValue || '0',
+                laborType: laborType || 'percentage'
+            });
+        } else {
+            const description = row.querySelector('.item-description')?.value || '';
+            const unitSelect = row.querySelector('.item-unit');
+            const unit = unitSelect ? unitSelect.value : 'piece';
+            const quantity = row.querySelector('.item-quantity')?.value || '1';
+            const price = row.querySelector('.item-price')?.value || '0';
+            items.push({ 
+                type: 'item',
+                description: description,
+                unit: unit,
+                quantity: quantity,
+                price: price
+            });
+        }
+    });
+
+    return {
+        company: {
+            name: document.getElementById('company-name')?.value,
+            address: document.getElementById('company-address')?.value,
+            city: document.getElementById('company-city')?.value,
+            phone: document.getElementById('company-phone')?.value,
+            email: document.getElementById('company-email')?.value,
+            siret: document.getElementById('company-siret')?.value,
+            logo: document.getElementById('company-logo-preview')?.src
+        },
+        client: {
+            name: document.getElementById('client-name')?.value,
+            address: document.getElementById('client-address')?.value,
+            phone: document.getElementById('client-phone')?.value,
+            email: document.getElementById('client-email')?.value
+        },
+        invoice: {
+            title: document.getElementById('invoice-title-input')?.value,
+            number: document.getElementById('invoice-number')?.value,
+            reference: document.getElementById('reference')?.value,
+            date: document.getElementById('invoice-date')?.value,
+            validity: document.getElementById('validity')?.value,
+            showValidity: document.getElementById('show-validity')?.checked,
+            paymentMethod: document.getElementById('payment-method')?.value,
+            currency: document.getElementById('currency')?.value,
+            mainTitle: document.getElementById('invoice-main-title')?.value
+        },
+        options: {
+            includeTva: document.getElementById('include-tva')?.checked,
+            tvaRate: document.getElementById('tva-rate')?.value,
+            includeLabor: document.getElementById('include-labor')?.checked,
+            laborValue: document.getElementById('labor-value')?.value,
+            laborType: document.getElementById('labor-type')?.value,
+            customLaborText: document.getElementById('custom-labor-text')?.checked,
+            customLaborTextValue: document.getElementById('custom-labor-text-value')?.value,
+            includeExtraFees: document.getElementById('include-extra-fees')?.checked,
+            extraFeesValue: document.getElementById('extra-fees-value')?.value,
+            extraFeesType: document.getElementById('extra-fees-type')?.value
+        },
+        design: {
+            templateStyle: document.getElementById('template-style')?.value,
+            colorScheme: document.getElementById('color-scheme')?.value,
+            fontFamily: document.getElementById('font-family')?.value,
+            tableStyle: document.getElementById('table-style')?.value
+        },
+        notes: document.getElementById('notes')?.value,
+        items: items,
+        stamp: {
+            image: stampData.image,
+            xPercent: stampData.xPercent,
+            yPercent: stampData.yPercent,
+            size: stampData.size,
+            opacity: stampData.opacity
+        },
+        watermark: {
+            type: watermarkData.type,
+            text: watermarkData.text,
+            image: watermarkData.image,
+            xPercent: watermarkData.xPercent,
+            yPercent: watermarkData.yPercent,
+            size: watermarkData.size,
+            opacity: watermarkData.opacity,
+            rotation: watermarkData.rotation
+        }
+    };
+}
+
+function saveToHistory() {
+    const invoiceData = {
+        id: Date.now(),
+        date: new Date().toLocaleString('fr-FR'),
+        data: collectInvoiceData()
+    };
+    const invoiceHistory = JSON.parse(localStorage.getItem('invoiceHistory') || '[]');
+    invoiceHistory.push(invoiceData);
+    localStorage.setItem('invoiceHistory', JSON.stringify(invoiceHistory));
+    alert('Devis enregistré dans l’historique.');
+}
+
+function restoreInvoice(data) {
+    // Remplir tous les champs avec les données fournies
+    // Entreprise
+    if (data.company) {
+        document.getElementById('company-name').value = data.company.name || '';
+        document.getElementById('company-address').value = data.company.address || '';
+        document.getElementById('company-city').value = data.company.city || '';
+        document.getElementById('company-phone').value = data.company.phone || '';
+        document.getElementById('company-email').value = data.company.email || '';
+        document.getElementById('company-siret').value = data.company.siret || '';
+        if (data.company.logo) document.getElementById('company-logo-preview').src = data.company.logo;
+    }
+
+    // Client
+    if (data.client) {
+        document.getElementById('client-name').value = data.client.name || '';
+        document.getElementById('client-address').value = data.client.address || '';
+        document.getElementById('client-phone').value = data.client.phone || '';
+        document.getElementById('client-email').value = data.client.email || '';
+    }
+
+    // Détails
+    if (data.invoice) {
+        document.getElementById('invoice-title-input').value = data.invoice.title || '';
+        document.getElementById('invoice-number').value = data.invoice.number || '';
+        document.getElementById('reference').value = data.invoice.reference || '';
+        document.getElementById('invoice-date').value = data.invoice.date || '';
+        document.getElementById('validity').value = data.invoice.validity || '30';
+        document.getElementById('show-validity').checked = data.invoice.showValidity !== undefined ? data.invoice.showValidity : true;
+        document.getElementById('payment-method').value = data.invoice.paymentMethod || 'Virement';
+        document.getElementById('currency').value = data.invoice.currency || 'XAF';
+        document.getElementById('invoice-main-title').value = data.invoice.mainTitle || 'DEVIS';
+    }
+
+    // Options
+    if (data.options) {
+        document.getElementById('include-tva').checked = data.options.includeTva || false;
+        document.getElementById('tva-rate').value = data.options.tvaRate || '20';
+        document.getElementById('include-labor').checked = data.options.includeLabor || false;
+        document.getElementById('labor-value').value = data.options.laborValue || '0';
+        document.getElementById('labor-type').value = data.options.laborType || 'percentage';
+        document.getElementById('custom-labor-text').checked = data.options.customLaborText || false;
+        document.getElementById('custom-labor-text-value').value = data.options.customLaborTextValue || '';
+        document.getElementById('include-extra-fees').checked = data.options.includeExtraFees || false;
+        document.getElementById('extra-fees-value').value = data.options.extraFeesValue || '0';
+        document.getElementById('extra-fees-type').value = data.options.extraFeesType || 'percentage';
+    }
+
+    // Design
+    if (data.design) {
+        document.getElementById('template-style').value = data.design.templateStyle || 'elegant';
+        document.getElementById('color-scheme').value = data.design.colorScheme || 'gold';
+        document.getElementById('font-family').value = data.design.fontFamily || 'Source Sans Pro';
+        document.getElementById('table-style').value = data.design.tableStyle || 'default';
+        applyTheme(data.design.colorScheme || 'gold');
+    }
+
+    // Notes
+    document.getElementById('notes').value = data.notes || '';
+
+    // Tampon
+    if (data.stamp) {
+        stampData.image = data.stamp.image || null;
+        stampData.xPercent = data.stamp.xPercent || 80;
+        stampData.yPercent = data.stamp.yPercent || 90;
+        stampData.size = data.stamp.size || 50;
+        stampData.opacity = data.stamp.opacity || 1;
+        document.getElementById('stamp-size').value = stampData.size;
+        document.getElementById('stamp-size-value').textContent = stampData.size + ' mm';
+        document.getElementById('stamp-opacity').value = stampData.opacity;
+        document.getElementById('stamp-opacity-value').textContent = Math.round(stampData.opacity * 100) + '%';
+    } else {
+        stampData.image = null;
+    }
+
+    // Filigrane
+    if (data.watermark) {
+        watermarkData.type = data.watermark.type || 'none';
+        watermarkData.text = data.watermark.text || '';
+        watermarkData.image = data.watermark.image || null;
+        watermarkData.xPercent = data.watermark.xPercent || 50;
+        watermarkData.yPercent = data.watermark.yPercent || 50;
+        watermarkData.size = data.watermark.size || 50;
+        watermarkData.opacity = data.watermark.opacity || 0.3;
+        watermarkData.rotation = data.watermark.rotation || 45;
+        document.getElementById('watermark-type').value = watermarkData.type;
+        document.getElementById('watermark-text').value = watermarkData.text;
+        document.getElementById('watermark-size').value = watermarkData.size;
+        document.getElementById('watermark-size-value').textContent = watermarkData.size + ' mm';
+        document.getElementById('watermark-opacity').value = watermarkData.opacity;
+        document.getElementById('watermark-opacity-value').textContent = watermarkData.opacity;
+        document.getElementById('watermark-rotation').value = watermarkData.rotation;
+        document.getElementById('watermark-rotation-value').textContent = watermarkData.rotation + '°';
+        toggleWatermarkInputs();
+    } else {
+        watermarkData.type = 'none';
+    }
+
+    // Reconstruction du tableau des prestations
+    const tbody = document.getElementById('items-table-body');
+    tbody.innerHTML = '';
+    if (data.items && data.items.length > 0) {
+        data.items.forEach(item => {
+            if (item.type === 'section') {
+                const trSection = document.createElement('tr');
+                trSection.className = 'section-row';
+                trSection.innerHTML = `
+                    <td colspan="5" style="padding: 8px; background-color: #f0f2f5; text-align: center; vertical-align: middle;">
+                        <input type="text" class="form-control section-title" value="${item.title || ''}" 
+                               style="text-align: center; font-weight: bold; background-color: #f0f2f5; border: 1px solid var(--primary-color); width: 100%;">
+                    </td>
+                    <td style="padding: 8px; background-color: #f0f2f5; text-align: center; vertical-align: middle;">
+                        <div style="display: flex; gap: 5px; justify-content: center;">
+                            <button class="btn btn-success btn-sm add-item-in-section" title="Ajouter un article dans cette section"><i class="fas fa-plus"></i></button>
+                            <button class="btn btn-danger btn-sm remove-section"><i class="fas fa-trash"></i> Section</button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(trSection);
+            } else if (item.type === 'sectionOptions') {
+                const trOptions = document.createElement('tr');
+                trOptions.className = 'section-option-row';
+                trOptions.innerHTML = `
+                    <td colspan="4" style="padding: 8px; background-color: #fafbfc; text-align: left; vertical-align: middle;">
+                        <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                            <div style="display: flex; align-items: center; gap: 5px;">
+                                <input type="checkbox" class="section-labor-checkbox" ${item.enabled ? 'checked' : ''}>
+                                <label style="font-weight: 600; margin: 0;">Main-d'œuvre section</label>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 5px;">
+                                <input type="number" class="form-control section-labor-value" value="${item.laborValue}" min="0" step="0.01" style="width: 80px;" ${item.enabled ? '' : 'disabled'}>
+                                <select class="form-control section-labor-type" style="width: 70px;" ${item.enabled ? '' : 'disabled'}>
+                                    <option value="percentage" ${item.laborType === 'percentage' ? 'selected' : ''}>%</option>
+                                    <option value="fixed" ${item.laborType === 'fixed' ? 'selected' : ''}>Montant fixe</option>
+                                </select>
+                            </div>
+                            <span style="font-weight: 600;">Sous-total section :</span>
+                            <span class="section-total-display" style="font-weight: 700; color: var(--primary-color);">0.00 FCFA</span>
+                        </div>
+                    </td>
+                    <td colspan="2" style="padding: 8px; background-color: #fafbfc; text-align: right; vertical-align: middle;">
+                        <button class="btn btn-danger btn-sm remove-section-options" style="background: #e74c3c; padding: 6px 12px;"><i class="fas fa-trash-alt"></i> Supprimer options</button>
+                    </td>
+                `;
+                tbody.appendChild(trOptions);
+                attachSectionOptionsListeners(trOptions);
+            } else if (item.type === 'item') {
+                const trItem = document.createElement('tr');
+                trItem.innerHTML = `
+                    <td><input type="text" class="form-control item-description" value="${item.description || ''}"></td>
+                    <td>
+                        <select class="form-control item-unit">
+                            <option value="piece" data-label="Pièce">Pièce</option>
+                            <option value="liter" data-label="Litre">Litre</option>
+                            <option value="meter" data-label="Mètre">Mètre</option>
+                            <option value="kg" data-label="Kilogramme">Kilogramme</option>
+                            <option value="hour" data-label="Heure">Heure</option>
+                            <option value="day" data-label="Jour">Jour</option>
+                            <option value="sqm" data-symbol="m²" data-label="Mètre carré">Mètre carré (m²)</option>
+                            <option value="cbm" data-label="Mètre cube">Mètre cube</option>
+                            <option value="ton" data-label="Tonne">Tonne</option>
+                            <option value="flatrate" data-label="Forfait">Forfait</option>
+                            <option value="service" data-label="Prestation">Prestation</option>
+                            <option value="kit" data-label="Kit">Kit</option>
+                            <option value="carton" data-label="Carton">Carton</option>
+                            <option value="bottle" data-label="Bouteille">Bouteille</option>
+                            <option value="roll" data-label="Rouleau">Rouleau</option>
+                            <option value="bag" data-label="Sac">Sac</option>
+                            <option value="box" data-label="Boîte">Boîte</option>
+                            <option value="set" data-label="Set">Set</option>
+                            <option value="pack" data-label="Pack">Pack</option>
+                            <option value="bucket" data-label="Seau">Seau</option>
+                            <option value="barrel" data-label="Baril">Baril</option>
+                            <option value="pallet" data-label="Palette">Palette</option>
+                            <option value="dozen" data-label="Douzaine">Douzaine</option>
+                            <option value="pair" data-label="Paire">Paire</option>
+                        </select>
+                    </td>
+                    <td><input type="number" class="form-control item-quantity" value="${item.quantity || 1}" min="1"></td>
+                    <td><input type="number" class="form-control item-price" value="${item.price || 0}" step="0.01"></td>
+                    <td class="item-total">${(parseFloat(item.quantity || 0) * parseFloat(item.price || 0)).toFixed(2)}</td>
+                    <td><button class="btn btn-danger btn-sm remove-item"><i class="fas fa-trash"></i> Suppr</button></td>
+                `;
+                tbody.appendChild(trItem);
+                const unitSelect = trItem.querySelector('.item-unit');
+                if (unitSelect && item.unit) unitSelect.value = item.unit;
+            }
+        });
+    } else {
+        // Ligne par défaut
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><input type="text" class="form-control item-description" value="câble vgv 2,5 mm"></td>
+            <td>
+                <select class="form-control item-unit">
+                    <option value="piece" data-label="Pièce">Pièce</option>
+                    <option value="liter" data-label="Litre">Litre</option>
+                    <option value="meter" data-label="Mètre">Mètre</option>
+                    <option value="kg" data-label="Kilogramme">Kilogramme</option>
+                    <option value="hour" data-label="Heure">Heure</option>
+                    <option value="day" data-label="Jour">Jour</option>
+                    <option value="sqm" data-symbol="m²" data-label="Mètre carré">Mètre carré (m²)</option>
+                    <option value="cbm" data-label="Mètre cube">Mètre cube</option>
+                    <option value="ton" data-label="Tonne">Tonne</option>
+                    <option value="flatrate" data-label="Forfait">Forfait</option>
+                    <option value="service" data-label="Prestation">Prestation</option>
+                    <option value="kit" data-label="Kit">Kit</option>
+                    <option value="carton" data-label="Carton">Carton</option>
+                    <option value="bottle" data-label="Bouteille">Bouteille</option>
+                    <option value="roll" data-label="Rouleau">Rouleau</option>
+                    <option value="bag" data-label="Sac">Sac</option>
+                    <option value="box" data-label="Boîte">Boîte</option>
+                    <option value="set" data-label="Set">Set</option>
+                    <option value="pack" data-label="Pack">Pack</option>
+                    <option value="bucket" data-label="Seau">Seau</option>
+                    <option value="barrel" data-label="Baril">Baril</option>
+                    <option value="pallet" data-label="Palette">Palette</option>
+                    <option value="dozen" data-label="Douzaine">Douzaine</option>
+                    <option value="pair" data-label="Paire">Paire</option>
+                </select>
+            </td>
+            <td><input type="number" class="form-control item-quantity" value="1" min="1"></td>
+            <td><input type="number" class="form-control item-price" value="1200.00" step="0.01"></td>
+            <td class="item-total">1200.00</td>
+            <td><button class="btn btn-danger btn-sm remove-item"><i class="fas fa-trash"></i> Suppr</button></td>
+        `;
+        tbody.appendChild(tr);
+    }
+
+    attachRemoveListeners();
+    attachInputListeners();
+    attachAddItemInSectionListeners();
+    updateInvoicePreview();
+    updateStampPreview();
+    updateWatermarkPreview();
+    saveDefaultSettings(); // met à jour les préférences par défaut
+}
+
+function showHistoryModal() {
+    const modal = document.getElementById('history-modal');
+    const listContainer = document.getElementById('history-list');
+    const history = JSON.parse(localStorage.getItem('invoiceHistory') || '[]');
+
+    if (history.length === 0) {
+        listContainer.innerHTML = '<div class="empty-history">Aucun devis enregistré pour le moment.</div>';
+    } else {
+        let html = '';
+        history.forEach((item, index) => {
+            const clientName = item.data?.client?.name || 'Client inconnu';
+            const invoiceNumber = item.data?.invoice?.number || 'N° inconnu';
+            const total = item.data ? formatCurrency(parseFloat(item.data?.invoice?.totalTTC?.replace(/[^0-9]/g, '')) || 0, item.data?.invoice?.currency || 'XAF') : '0';
+            html += `
+                <div class="history-item">
+                    <div class="history-item-info">
+                        <p><strong>${invoiceNumber}</strong> - ${clientName}</p>
+                        <p>Date: ${item.date} | Total: ${total}</p>
+                    </div>
+                    <div class="history-actions">
+                        <button class="btn btn-primary btn-sm load-history" data-index="${index}"><i class="fas fa-folder-open"></i> Charger</button>
+                        <button class="btn btn-danger btn-sm delete-history" data-index="${index}"><i class="fas fa-trash"></i> Supprimer</button>
+                    </div>
+                </div>
+            `;
+        });
+        listContainer.innerHTML = html;
+
+        listContainer.querySelectorAll('.load-history').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const idx = btn.getAttribute('data-index');
+                loadInvoiceFromHistory(parseInt(idx));
+                modal.classList.remove('active');
+            });
+        });
+
+        listContainer.querySelectorAll('.delete-history').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const idx = btn.getAttribute('data-index');
+                deleteFromHistory(parseInt(idx));
+                showHistoryModal(); // rafraîchir
+            });
+        });
+    }
+
+    modal.classList.add('active');
+}
+
+function loadInvoiceFromHistory(index) {
+    const history = JSON.parse(localStorage.getItem('invoiceHistory') || '[]');
+    if (history[index]) {
+        restoreInvoice(history[index].data);
+    }
+}
+
+function deleteFromHistory(index) {
+    const history = JSON.parse(localStorage.getItem('invoiceHistory') || '[]');
+    if (index >= 0 && index < history.length) {
+        history.splice(index, 1);
+        localStorage.setItem('invoiceHistory', JSON.stringify(history));
+    }
+}
+
+function resetForm() {
+    if (confirm('Réinitialiser le formulaire ? Toutes les données seront perdues.')) {
+        document.querySelector('form')?.reset();
+        const tbody = document.getElementById('items-table-body');
+        if (tbody) {
+            tbody.innerHTML = `
+                <tr>
+                    <td><input type="text" class="form-control item-description" placeholder="Description"></td>
+                    <td>
+                        <select class="form-control item-unit">
+                            <option value="piece" data-label="Pièce">Pièce</option>
+                            <option value="liter" data-label="Litre">Litre</option>
+                            <option value="meter" data-label="Mètre">Mètre</option>
+                            <option value="kg" data-label="Kilogramme">Kilogramme</option>
+                            <option value="hour" data-label="Heure">Heure</option>
+                            <option value="day" data-label="Jour">Jour</option>
+                            <option value="sqm" data-symbol="m²" data-label="Mètre carré">Mètre carré (m²)</option>
+                            <option value="cbm" data-label="Mètre cube">Mètre cube</option>
+                            <option value="ton" data-label="Tonne">Tonne</option>
+                            <option value="flatrate" data-label="Forfait">Forfait</option>
+                            <option value="service" data-label="Prestation">Prestation</option>
+                            <option value="kit" data-label="Kit">Kit</option>
+                            <option value="carton" data-label="Carton">Carton</option>
+                            <option value="bottle" data-label="Bouteille">Bouteille</option>
+                            <option value="roll" data-label="Rouleau">Rouleau</option>
+                            <option value="bag" data-label="Sac">Sac</option>
+                            <option value="box" data-label="Boîte">Boîte</option>
+                            <option value="set" data-label="Set">Set</option>
+                            <option value="pack" data-label="Pack">Pack</option>
+                            <option value="bucket" data-label="Seau">Seau</option>
+                            <option value="barrel" data-label="Baril">Baril</option>
+                            <option value="pallet" data-label="Palette">Palette</option>
+                            <option value="dozen" data-label="Douzaine">Douzaine</option>
+                            <option value="pair" data-label="Paire">Paire</option>
+                        </select>
+                    </td>
+                    <td><input type="number" class="form-control item-quantity" placeholder="1" min="1"></td>
+                    <td><input type="number" class="form-control item-price" placeholder="0.00" step="0.01"></td>
+                    <td class="item-total">0.00</td>
+                    <td><button class="btn btn-danger btn-sm remove-item"><i class="fas fa-trash"></i> Suppr</button></td>
+                </tr>
+            `;
+        }
+        const logoPreview = document.getElementById('company-logo-preview');
+        if (logoPreview) {
+            logoPreview.src = 'https://via.placeholder.com/80x80?text=LOGO';
+        }
+        const checkboxes = ['include-labor'];
+        checkboxes.forEach(id => {
+            const checkbox = document.getElementById(id);
+            if (checkbox) checkbox.checked = true;
+        });
+        const includeTva = document.getElementById('include-tva');
+        if (includeTva) includeTva.checked = false;
+        const includeExtraFees = document.getElementById('include-extra-fees');
+        if (includeExtraFees) includeExtraFees.checked = false;
+        const customLaborText = document.getElementById('custom-labor-text');
+        if (customLaborText) customLaborText.checked = false;
+        const inputs = {
+            'tva-rate': '20',
+            'labor-value': '0',
+            'extra-fees-value': '0',
+            'custom-labor-text-value': ''
+        };
+        Object.entries(inputs).forEach(([id, value]) => {
+            const input = document.getElementById(id);
+            if (input) input.value = value;
+        });
+        const selects = ['labor-type', 'extra-fees-type'];
+        selects.forEach(id => {
+            const select = document.getElementById(id);
+            if (select) select.value = 'percentage';
+        });
+        const companyNameDisplay = document.getElementById('company-name-display');
+        companyNameDisplay.textContent = 'CTL-POWER';
+        companyNameDisplay.style.background = 'white';
+        companyNameDisplay.style.padding = '5px 10px';
+        companyNameDisplay.style.borderRadius = '4px';
+        document.getElementById('company-name-signature').textContent = 'Pour CTL-POWER';
+        removeStamp();
+        removeWatermark();
+        toggleOptionInputs();
+        loadDefaultSettings();
+        updateInvoicePreview();
+        attachRemoveListeners();
+    }
+}
+
+function showModernCountdownTimer() {
+    let countdownOverlay = document.getElementById('countdown-overlay');
+    if (countdownOverlay) {
+        countdownOverlay.remove();
+    }
+    countdownOverlay = document.createElement('div');
+    countdownOverlay.id = 'countdown-overlay';
+    countdownOverlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        animation: fadeIn 0.3s ease-in;
+    `;
+    const countdownContainer = document.createElement('div');
+    countdownContainer.style.cssText = `
+        padding: 25px 40px;
+        background: linear-gradient(145deg, ${currentThemeColors()});
+        border: 2px solid ${currentTheme === 'gold' ? '#b58900' : currentTheme === 'blue' ? '#0652dd' : currentTheme === 'green' ? '#27ae60' : currentTheme === 'purple' ? '#8e44ad' : currentTheme === 'orange' ? '#d35400' : '#c0392b'};
+        border-radius: 15px;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.5), inset 0 2px 5px rgba(255,255,255,0.3);
+        transform: perspective(1200px) rotateX(15deg) rotateY(5deg);
+        color: white;
+        font-family: Helvetica, sans-serif;
+        font-weight: bold;
+        font-size: 24px;
+        text-align: center;
+        animation: float 2s ease-in-out infinite;
+    `;
+    countdownContainer.innerHTML = `
+        <div id="countdown-text" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.7), -1px -1px 2px rgba(255,255,255,0.3);">
+            Génération : <span id="countdown-timer">0.0</span>s
+        </div>
+        <div style="margin-top: 15px; font-size: 16px; font-weight: normal; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+            Création de votre devis professionnel...
+        </div>
+    `;
+    countdownOverlay.appendChild(countdownContainer);
+    document.body.appendChild(countdownOverlay);
+    const timerElement = document.getElementById('countdown-timer');
+    const startTime = performance.now();
+    function updateTimer() {
+        const elapsed = (performance.now() - startTime) / 1000;
+        if (timerElement) {
+            timerElement.textContent = elapsed.toFixed(1);
+        }
+        return requestAnimationFrame(updateTimer);
+    }
+    const animationFrame = updateTimer();
+    return () => {
+        cancelAnimationFrame(animationFrame);
+        if (countdownOverlay) {
+            countdownOverlay.remove();
+        }
+    };
+}
+
+function showBorderStyleModal(callback) {
+    const modal = document.createElement('div');
+    modal.id = 'border-style-modal';
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+    `;
+    const modalContent = document.createElement('div');
+    modalContent.style.cssText = `
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        max-width: 700px;
+        width: 90%;
+        text-align: center;
+        font-family: Helvetica, sans-serif;
+    `;
+    modalContent.innerHTML = `
+        <h2 style="margin-bottom: 15px; color: ${getCssVariable('--primary-color')};">Choisissez un style de bordure pour le devis</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; justify-content: center;">
+            <button class="border-option" data-style="simple" style="padding: 12px; background: ${getCssVariable('--primary-color')}; color: white; border: none; border-radius: 5px; cursor: pointer;">Bordure simple</button>
+            <button class="border-option" data-style="gradient" style="padding: 12px; background: linear-gradient(to right, ${getCssVariable('--primary-color')}, ${getCssVariable('--secondary-color')}); color: white; border: none; border-radius: 5px; cursor: pointer;">Bordure dégradée</button>
+            <button class="border-option border-option-double" data-style="double" style="padding: 12px; background: ${getCssVariable('--primary-color')}; color: white; border: none; border-radius: 5px; cursor: pointer; animation: shineDouble 2s infinite, pulseDouble 1.5s infinite;">✨ Double bordure ✨</button>
+            <button class="border-option" data-style="neon" style="padding: 12px; background: ${getCssVariable('--primary-color')}; color: white; border: none; border-radius: 5px; cursor: pointer; box-shadow: 0 0 8px ${getCssVariable('--primary-color')};">Bordure néon</button>
+            <button class="border-option" data-style="geometric" style="padding: 12px; background: linear-gradient(to right, ${getCssVariable('--primary-color')}, ${getCssVariable('--secondary-color')}); color: white; border: none; border-radius: 5px; cursor: pointer;">Bordure géométrique</button>
+            <button class="border-option" data-style="floating" style="padding: 12px; background: ${getCssVariable('--primary-color')}; color: white; border: none; border-radius: 5px; cursor: pointer; box-shadow: 3px 3px 8px rgba(0,0,0,0.3);">Bordure flottante</button>
+            <button class="border-option" data-style="wavy" style="padding: 12px; background: ${getCssVariable('--primary-color')}; color: white; border: none; border-radius: 5px; cursor: pointer;">Bordure ondulée</button>
+            <button class="border-option" data-style="metallic" style="padding: 12px; background: linear-gradient(to right, ${getCssVariable('--primary-color')}, #ffffff, ${getCssVariable('--secondary-color')}); color: white; border: none; border-radius: 5px; cursor: pointer;">Bordure métallique</button>
+            <button class="border-option" data-style="futuristic" style="padding: 12px; background: ${getCssVariable('--primary-color')}; color: white; border: none; border-radius: 5px; cursor: pointer; box-shadow: 0 0 5px ${getCssVariable('--secondary-color')};">Bordure futuriste</button>
+            <button class="border-option" data-style="none" style="padding: 12px; background: #6b7280; color: white; border: none; border-radius: 5px; cursor: pointer;">Aucune bordure</button>
+        </div>
+        <button id="cancel-border" style="margin-top: 20px; padding: 12px 25px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;">Annuler</button>
+    `;
+    modal.appendChild(modalContent);
+    document.body.appendChild(modal);
+    document.querySelectorAll('.border-option').forEach(button => {
+        button.addEventListener('click', () => {
+            const style = button.getAttribute('data-style');
+            modal.remove();
+            callback(style);
+        });
+    });
+    document.getElementById('cancel-border').addEventListener('click', () => {
+        modal.remove();
+        callback(null);
+    });
+
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes shineDouble {
+            0% { filter: brightness(1); }
+            50% { filter: brightness(1.3); box-shadow: 0 0 15px gold; }
+            100% { filter: brightness(1); }
+        }
+        @keyframes pulseDouble {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+// ==================== INITIALISATION ====================
+document.addEventListener('DOMContentLoaded', () => {
+    initFirstVisit(); // Initialiser le timestamp de première visite
+    updateGenerationDisplay(); // Afficher l'état initial
+    initResizer();
+    loadDefaultSettings();
+
+    const today = new Date().toISOString().split('T')[0];
+    const invoiceDate = document.getElementById('invoice-date');
+    if (invoiceDate) invoiceDate.value = today;
+    const invoiceDatePreview = document.getElementById('invoice-date-preview');
+    if (invoiceDatePreview) invoiceDatePreview.textContent = formatDate(today);
+
+    setupTabNavigation();
+    setupThemeSelector();
+    handleLogoUpload();
+    attachInputListeners();
+    attachRemoveListeners();
+
+    document.getElementById('load-example-btn').addEventListener('click', () => {
+        const metier = document.getElementById('example-trade').value;
+        if (metier) {
+            loadExample(metier);
+        } else {
+            alert('Veuillez sélectionner un métier.');
+        }
+    });
+
+    // Gestion du tampon
+    document.getElementById('stamp-upload').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                stampData.image = event.target.result;
+                const img = new Image();
+                img.onload = function() {
+                    stampData.imageWidth = img.width;
+                    stampData.imageHeight = img.height;
+                    updateStampPreview();
+                    saveDefaultSettings();
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    document.getElementById('stamp-size').addEventListener('input', function() {
+        stampData.size = parseInt(this.value);
+        document.getElementById('stamp-size-value').textContent = this.value + ' mm';
+        updateStampPreview();
+        saveDefaultSettings();
+    });
+
+    document.getElementById('stamp-opacity').addEventListener('input', function() {
+        stampData.opacity = parseFloat(this.value);
+        document.getElementById('stamp-opacity-value').textContent = Math.round(this.value * 100) + '%';
+        updateStampPreview();
+        saveDefaultSettings();
+    });
+
+    document.getElementById('stamp-remove-btn').addEventListener('click', removeStamp);
+
+    // Gestion du filigrane
+    document.getElementById('watermark-type').addEventListener('change', function() {
+        watermarkData.type = this.value;
+        toggleWatermarkInputs();
+        if (watermarkData.type === 'none') {
+            watermarkData.text = '';
+            watermarkData.image = null;
+            updateWatermarkPreview();
+        } else if (watermarkData.type === 'text' && watermarkData.text) {
+            updateWatermarkPreview();
+        }
+        saveDefaultSettings();
+    });
+
+    document.getElementById('watermark-text').addEventListener('input', function() {
+        watermarkData.text = this.value;
+        if (watermarkData.type === 'text') {
+            updateWatermarkPreview();
+        }
+        saveDefaultSettings();
+    });
+
+    document.getElementById('watermark-size').addEventListener('input', function() {
+        watermarkData.size = parseInt(this.value);
+        document.getElementById('watermark-size-value').textContent = this.value + ' mm';
+        if (watermarkData.type !== 'none') {
+            updateWatermarkPreview();
+        }
+        saveDefaultSettings();
+    });
+
+    document.getElementById('watermark-opacity').addEventListener('input', function() {
+        watermarkData.opacity = parseFloat(this.value);
+        document.getElementById('watermark-opacity-value').textContent = this.value;
+        if (watermarkData.type !== 'none') {
+            updateWatermarkPreview();
+        }
+        saveDefaultSettings();
+    });
+
+    document.getElementById('watermark-rotation').addEventListener('input', function() {
+        watermarkData.rotation = parseInt(this.value);
+        document.getElementById('watermark-rotation-value').textContent = this.value + '°';
+        if (watermarkData.type !== 'none') {
+            updateWatermarkPreview();
+        }
+        saveDefaultSettings();
+    });
+
+    document.getElementById('watermark-image-upload').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                watermarkData.image = event.target.result;
+                const img = new Image();
+                img.onload = function() {
+                    watermarkData.imageWidth = img.width;
+                    watermarkData.imageHeight = img.height;
+                    if (watermarkData.type === 'image') {
+                        updateWatermarkPreview();
+                    }
+                    saveDefaultSettings();
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    document.getElementById('watermark-remove-btn').addEventListener('click', removeWatermark);
+
+    document.querySelector('.add-item')?.addEventListener('click', addItemRow);
+    document.querySelector('.add-section')?.addEventListener('click', addSectionRow);
+    document.querySelector('.add-section-first')?.addEventListener('click', addSectionFirst);
+
+    document.getElementById('generate-pdf')?.addEventListener('click', generatePDF);
+    document.getElementById('save-template')?.addEventListener('click', saveToHistory);
+    document.getElementById('reset-form')?.addEventListener('click', resetForm);
+    document.getElementById('load-history-btn')?.addEventListener('click', showHistoryModal);
+    document.getElementById('close-history-modal')?.addEventListener('click', () => {
+        document.getElementById('history-modal').classList.remove('active');
+    });
+
+    const autoSaveFields = [
+        'company-name', 'company-address', 'company-city', 'company-phone', 'company-email', 'company-siret',
+        'client-name', 'client-address', 'client-phone', 'client-email',
+        'invoice-number', 'reference', 'invoice-date', 'validity', 'payment-method', 'currency',
+        'notes', 'include-tva', 'tva-rate', 'include-labor', 'labor-value', 'labor-type',
+        'custom-labor-text', 'custom-labor-text-value',
+        'include-extra-fees', 'extra-fees-value', 'extra-fees-type',
+        'invoice-main-title', 'template-style', 'color-scheme', 'font-family',
+        'table-style'
+    ];
+    autoSaveFields.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', saveDefaultSettings);
+            el.addEventListener('change', saveDefaultSettings);
+        }
+    });
+    document.getElementById('company-logo')?.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById('company-logo-preview').src = e.target.result;
+                updateInvoicePreview();
+                saveDefaultSettings();
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    ['include-tva', 'include-labor', 'custom-labor-text', 'include-extra-fees', 'show-validity'].forEach(id => {
+        const checkbox = document.getElementById(id);
+        if (checkbox) {
+            checkbox.addEventListener('change', () => {
+                toggleOptionInputs();
+                updateInvoicePreview();
+                saveDefaultSettings();
+            });
+        }
+    });
+
+    ['tva-rate', 'labor-value', 'extra-fees-value', 'invoice-title-input', 'custom-labor-text-value'].forEach(id => {
+        const input = document.getElementById(id);
+        if (input) input.addEventListener('input', updateInvoicePreview);
+    });
+
+    ['labor-type', 'extra-fees-type', 'table-style', 'template-style'].forEach(id => {
+        const select = document.getElementById(id);
+        if (select) select.addEventListener('change', updateInvoicePreview);
+    });
+
+    toggleOptionInputs();
+    toggleWatermarkInputs();
+    updateInvoicePreview();
+
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes float {
+            0% { transform: perspective(1200px) rotateX(15deg) rotateY(5deg) translateY(0); }
+            50% { transform: perspective(1200px) rotateX(15deg) rotateY(5deg) translateY(-10px); }
+            100% { transform: perspective(1200px) rotateX(15deg) rotateY(5deg) translateY(0); }
+        }
+        .border-option:hover {
+            transform: scale(1.05);
+            transition: transform 0.2s;
+        }
+        .highlight-total {
+            font-size: 15px !important;
+            font-weight: bold !important;
+            color: ${getCssVariable('--primary-color')} !important;
+            background-color: rgba(${hexToRgb(getCssVariable('--secondary-color'))}, 0.1) !important;
+            padding: 5px 9px !important;
+            border: 1px solid ${getCssVariable('--secondary-color')} !important;
+            border-radius: 4px !important;
+            display: inline-block !important;
+        }
+    `;
+    document.head.appendChild(style);
+});
+
+function setupTabNavigation() {
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(btn.getAttribute('data-tab'))?.classList.add('active');
+        });
+    });
+}
+
+function setupThemeSelector() {
+    const themeToggle = document.getElementById('theme-toggle');
+    const themePanel = document.getElementById('theme-panel');
+    const themeOptions = document.querySelectorAll('.theme-option');
+    if (themeToggle && themePanel) {
+        themeToggle.addEventListener('click', () => themePanel.classList.toggle('active'));
+    }
+    themeOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            applyTheme(option.getAttribute('data-theme'));
+            themePanel?.classList.remove('active');
+            updateInvoicePreview();
+            saveDefaultSettings();
+        });
+    });
+}
+
+function applyTheme(theme) {
+    currentTheme = theme;
+    const themes = {
+        blue: { primary: '#0984e3', secondary: '#0652dd' },
+        green: { primary: '#2ecc71', secondary: '#27ae60' },
+        gold: { primary: '#d4a017', secondary: '#b58900' },
+        purple: { primary: '#9b59b6', secondary: '#8e44ad' },
+        orange: { primary: '#e67e22', secondary: '#d35400' },
+        red: { primary: '#e74c3c', secondary: '#c0392b' }
+    };
+    const { primary, secondary } = themes[theme] || themes.gold;
+    document.documentElement.style.setProperty('--primary-color', primary);
+    document.documentElement.style.setProperty('--secondary-color', secondary);
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        themeToggle.style.backgroundColor = primary;
+    }
+}
+
+function handleLogoUpload() {
+    const logoInput = document.getElementById('company-logo');
+    const logoPreview = document.getElementById('company-logo-preview');
+    if (logoInput && logoPreview) {
+        logoInput.addEventListener('change', e => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = event => {
+                    logoPreview.src = event.target.result;
+                    updateInvoicePreview();
+                    saveDefaultSettings();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+}
+
+function getCssVariable(variable) {
+    return getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
+}
+
+function hexToRgb(hex) {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `${r}, ${g}, ${b}`;
+}
