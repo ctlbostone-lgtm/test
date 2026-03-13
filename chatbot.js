@@ -52,8 +52,7 @@
                 { q: "Comment changer le mode de paiement ?", a: "C'est dans l'onglet <b>'Détails'</b>, liste déroulante <b>'Mode de paiement'</b>.", target: "details-tab", field: "payment-method" },
                 { q: "Comment obtenir le fichier PDF ?", a: "Cliquez sur le bouton <b>'Générer PDF'</b>. Vous pouvez même choisir un style de bordure !", target: null, field: "generate-pdf" },
                 { q: "À quoi sert le QR code ?", a: "Il est généré automatiquement avec les détails du devis pour une vérification rapide.", target: null, field: "qr-code" },
-                { q: "Puis-je charger un ancien devis pour le modifier ?", a: "Oui ! Cliquez sur le bouton <b>'Charger devis'</b> en bas à gauche. La liste de vos devis sauvegardés apparaît. Choisissez celui à modifier.", target: null, field: "load-history-btn" },
-                { q: "Pourquoi y a-t-il un compteur en haut ?", a: "Ce compteur limite à 3 générations de PDF par période de 6 heures, pour vous permettre de tester l'application.", target: null, field: null }
+                { q: "Puis-je charger un ancien devis pour le modifier ?", a: "Oui ! Cliquez sur le bouton <b>'Charger devis'</b> en bas à gauche. La liste de vos devis sauvegardés apparaît. Choisissez celui à modifier.", target: null, field: "load-history-btn" }
             ]
         }
     ];
