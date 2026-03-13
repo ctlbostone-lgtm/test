@@ -12,12 +12,16 @@
 <body>
     <div class="bg-pattern"></div>
 
-    <!-- Compteur de générations et timer d'essai -->
+    <!-- Compteur de générations / message de blocage -->
     <div id="generation-counter" class="generation-counter">
-        <i class="fas fa-hourglass-half"></i> Générations restantes : <span id="remaining-generations">3</span> / 3
-        <span id="timer-reset" style="margin-left: 15px; font-size: 12px;"></span>
-        <span id="expired-message" style="display: none; margin-left: 15px; color: #ffcccc;">
-            <i class="fas fa-exclamation-triangle"></i> Période d'essai terminée. <a href="https://wa.me/237680040145" target="_blank" style="color: white; text-decoration: underline;">Contactez-nous sur WhatsApp</a> pour la version pro.
+        <i class="fas fa-hourglass-half"></i> 
+        <span id="counter-message">Générations restantes : <span id="remaining-generations">3</span> / 3</span>
+        <span id="timer-reset"></span>
+        <span id="block-message" style="display:none; color: #ffcccc;">
+            <i class="fas fa-exclamation-triangle"></i> Version d'essai expirée. 
+            <a href="https://wa.me/237680040145?text=Bonjour%20je%20souhaite%20acquérir%20la%20version%20pro%20du%20générateur%20de%20devis" target="_blank" style="color: white; text-decoration: underline; font-weight: bold;">
+                <i class="fab fa-whatsapp"></i> Contactez-nous sur WhatsApp
+            </a>
         </span>
     </div>
 
